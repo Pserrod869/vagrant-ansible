@@ -12,16 +12,17 @@ cp -vf /vagrant/.vagrant/machines/negocio/virtualbox/private_key ./private_keys/
 chown -R vagrant:vagrant ./private_keys
 chmod 600 ./private_keys/*
 
+# Archivos de configuración e inventario
+cp -vf /vagrant/ansible.cfg .
+chown vagrant:vagrant ./ansible.cfg
+
+cp -vf /vagrant/inventory.yml .
+chown vagrant:vagrant ./inventory.yml
+
+cp -vf /vagrant/requirements.yml .
+chown vagrant:vagrant ./requirements.yml
+
 # Descomentar progresivamente según vayamos creando los ficheros
-# cp -vf /vagrant/ansible.cfg .
-# chown vagrant:vagrant ./ansible.cfg
-
-# cp -vf /vagrant/inventory.yml .
-# chown vagrant:vagrant ./inventory.yml
-
-# cp -vf /vagrant/requirements.yml .
-# chown vagrant:vagrant ./requirements.yml
-
 # cp -vrf /vagrant/dns .
 # chown -R vagrant:vagrant ./dns
 
