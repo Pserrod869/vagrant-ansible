@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 set -xeu
 
-# Instalar ansible y utilidades
+# Instalación de Ansible y herramientas auxiliares
 apt-get update
 apt-get install -y ansible ansible-lint whois dnsutils curl
 
-# Copiar claves privadas de Vagrant
+# Copia de claves privadas de Vagrant para evitar conflictos de permisos en Windows
 mkdir -p ./private_keys
 cp -vf /vagrant/.vagrant/machines/dns/virtualbox/private_key ./private_keys/dns.key.rsa
 cp -vf /vagrant/.vagrant/machines/negocio/virtualbox/private_key ./private_keys/negocio.key.rsa
 chown -R vagrant:vagrant ./private_keys
 chmod 600 ./private_keys/*
 
-# Archivos de configuración e inventario
+# Copia de configuración global, inventario y dependencias
 cp -vf /vagrant/ansible.cfg .
 chown vagrant:vagrant ./ansible.cfg
 
@@ -22,27 +22,25 @@ chown vagrant:vagrant ./inventory.yml
 cp -vf /vagrant/requirements.yml .
 chown vagrant:vagrant ./requirements.yml
 
-# Carpeta DNS
+# Copia de los playbooks y ficheros de cada servicio
 cp -vrf /vagrant/dns .
 chown -R vagrant:vagrant ./dns
 
-# Carpeta Web
 cp -vrf /vagrant/web .
 chown -R vagrant:vagrant ./web
 
-# Descomentar progresivamente según vayamos creando los ficheros
-# cp -vrf /vagrant/ftp .
-# chown -R vagrant:vagrant ./ftp
+cp -vrf /vagrant/ftp .
+chown -R vagrant:vagrant ./ftp
 
-# Copiar contraseña del vault
-# cp -vf /vagrant/vault_pass.txt ./.vault_pass.txt
-# chown vagrant:vagrant ./.vault_pass.txt
-# chmod 600 ./.vault_pass.txt
+# Copia de la clave maestra de Ansible Vault
+cp -vf /vagrant/vault_pass.txt ./.vault_pass.txt
+chown vagrant:vagrant ./.vault_pass.txt
+chmod 600 ./.vault_pass.txt
 
-# Instalar dependencias de Ansible
-# su - vagrant -c "ansible-galaxy collection install -r requirements.yml"
+# Instalación de colecciones necesarias de Ansible Galaxy
+su - vagrant -c "ansible-galaxy collection install -r requirements.yml"
 
-# Provisionar con Ansible
+# Ejecución de playbooks de aprovisionamiento
 su - vagrant -c "ansible-playbook dns/dns.yml"
 su - vagrant -c "ansible-playbook web/web.yml"
-# su - vagrant -c "ansible-playbook ftp/ftp.yml --vault-password-file ./.vault_pass.txt"
+su - vagrant -c "ansible-playbook ftp/ftp.yml --vault-password-file ./.vault_pass.txt"
