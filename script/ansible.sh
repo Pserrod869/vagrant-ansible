@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -xeu
 
-# Instalar ansible y utilidades (añadimos dnsutils para tener dig en pruebas)
+# Instalar ansible y utilidades
 apt-get update
-apt-get install -y ansible ansible-lint whois dnsutils
+apt-get install -y ansible ansible-lint whois dnsutils curl
 
 # Copiar claves privadas de Vagrant
 mkdir -p ./private_keys
@@ -26,10 +26,11 @@ chown vagrant:vagrant ./requirements.yml
 cp -vrf /vagrant/dns .
 chown -R vagrant:vagrant ./dns
 
-# Descomentar progresivamente según vayamos creando los ficheros
-# cp -vrf /vagrant/web .
-# chown -R vagrant:vagrant ./web
+# Carpeta Web
+cp -vrf /vagrant/web .
+chown -R vagrant:vagrant ./web
 
+# Descomentar progresivamente según vayamos creando los ficheros
 # cp -vrf /vagrant/ftp .
 # chown -R vagrant:vagrant ./ftp
 
@@ -43,5 +44,5 @@ chown -R vagrant:vagrant ./dns
 
 # Provisionar con Ansible
 su - vagrant -c "ansible-playbook dns/dns.yml"
-# su - vagrant -c "ansible-playbook web/web.yml"
+su - vagrant -c "ansible-playbook web/web.yml"
 # su - vagrant -c "ansible-playbook ftp/ftp.yml --vault-password-file ./.vault_pass.txt"
