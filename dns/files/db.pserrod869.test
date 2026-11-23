@@ -1,0 +1,13 @@
+$TTL    604800
+@       IN      SOA     dns.pserrod869.test. admin.pserrod869.test. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      dns.pserrod869.test.
+dns     IN      A       192.168.57.5
+negocio IN      A       192.168.57.7
+www     IN      CNAME   negocio.pserrod869.test.
+ftp     IN      CNAME   negocio.pserrod869.test.
